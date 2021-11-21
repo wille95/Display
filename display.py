@@ -24,7 +24,7 @@ tft = st7789.ST7789(
     cs = Pin(5,Pin.OUT),
     dc = Pin(16,Pin.OUT),
     backlight = Pin(4,Pin.OUT),
-    rotation = 1
+    rotation = 3
     )
 
 tft.fill(st7789.BLUE)
