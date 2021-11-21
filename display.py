@@ -27,12 +27,19 @@ tft = st7789.ST7789(
     rotation = 3
     )
 
-tft.fill(st7789.BLUE)
+tft.fill(st7789.BLACK)
 line = 0
 col = 0
+
 while True:
-    ausgabe = str(bmp180.temperature) 
-    tft.text(font, ausgabe, 10, 10, st7789.YELLOW, st7789.BLUE)
+    bmptemp = round(bmp180.temperature,2)
+    ausgabe = str(bmptemp) 
+    tft.text(font, "aktuelle",10,10,st7789.RED,st7789.CYAN)
+    tft.text(font, "Temperatur = ",10,30,st7789.BLACK,st7789.YELLOW)
+    tft.text(font, ausgabe, 10, 50, st7789.BLUE, st7789.WHITE)
+    tft.text(font, "Grad Celcius!", 10, 70, st7789.RED,st7789.GREEN)
+    tft.text(font, ":)  <3  :D", 10, 100, st7789.YELLOW,st7789.BLACK)
+
 
 
 
