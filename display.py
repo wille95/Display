@@ -1,13 +1,13 @@
-from time import sleep
-from machine import Pin, SoftSPI, SoftI2C
-import st7789py as st7789
-from bmp180 import BMP180
+from time import sleep          # Sleeo importieren
+from machine import Pin, SoftSPI, SoftI2C   #Pin, SoftSPI und SoftI2C importieren für Sensor und Display
+import st7789py as st7789       # Display importieren
+from bmp180 import BMP180       # aus Bibliothek Sensor importieren
 
-from romfonts import vga2_16x16 as font
+from romfonts import vga2_16x16 as font     # Darstellung importieren
 
 bmp180 = BMP180(SoftI2C(scl=Pin(22), sda=Pin(21)))  # Sensor importieren
 
-spi = SoftSPI(
+spi = SoftSPI(                  #Einstellung für Display
     baudrate = 20000000, 
     polarity = 1,
     phase = 0, 
@@ -16,29 +16,29 @@ spi = SoftSPI(
     miso = Pin(13)
     )
 
-tft = st7789.ST7789(
-    spi, 
-    135,
-    240, 
-    reset = Pin(23,Pin.OUT), 
-    cs = Pin(5,Pin.OUT),
-    dc = Pin(16,Pin.OUT),
-    backlight = Pin(4,Pin.OUT),
-    rotation = 3
+tft = st7789.ST7789(                # aus Klasse ST7789 Objekt bilden   dc=None, cs=None, backlight=None, rotation=0)
+    spi,                            # SPI
+    135,                            # breite
+    240,                            # höhe
+    reset = Pin(23,Pin.OUT),        # Display resten
+    cs = Pin(5,Pin.OUT),            # cs?
+    dc = Pin(16,Pin.OUT),           # dc?
+    backlight = Pin(4,Pin.OUT),     # Hintergrund
+    rotation = 3                    # Bildschirmrotation
     )
 
-tft.fill(st7789.BLACK)
+tft.fill(st7789.BLACK)              # Display hintergrund füllen
 line = 0
 col = 0
 
 while True:
-    bmptemp = round(bmp180.temperature,2)
-    ausgabe = str(bmptemp) 
-    tft.text(font, "aktuelle",10,10,st7789.RED,st7789.CYAN)
-    tft.text(font, "Temperatur = ",10,30,st7789.BLACK,st7789.YELLOW)
-    tft.text(font, ausgabe, 10, 50, st7789.BLUE, st7789.WHITE)
-    tft.text(font, "Grad Celcius!", 10, 70, st7789.RED,st7789.GREEN)
-    tft.text(font, ":)  <3  :D", 10, 100, st7789.YELLOW,st7789.BLACK)
+    bmptemp = round(bmp180.temperature,2)   # Temperatur runden
+    ausgabe = str(bmptemp)                  # als zeichenkette Temperatur ausgabe zuweisen
+    tft.text(font, "aktuelle",10,10,st7789.RED,st7789.CYAN) # ausgabe text aktuelle
+    tft.text(font, "Temperatur = ",10,30,st7789.BLACK,st7789.YELLOW)    # ausgabe text Temperatur =
+    tft.text(font, ausgabe, 10, 50, st7789.BLUE, st7789.WHITE)     # ausgabe temperaturwert
+    tft.text(font, "Grad Celcius!", 10, 70, st7789.RED,st7789.GREEN)    # ausfageb text Grad celcius
+    tft.text(font, ":)  <3  :D", 10, 100, st7789.YELLOW,st7789.BLACK)   # ausgabe Smileys :)
 
 
 
