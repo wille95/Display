@@ -8,16 +8,16 @@ from romfonts import vga2_16x16 as font     # Darstellung importieren
 bmp180 = BMP180(SoftI2C(scl=Pin(22), sda=Pin(21)))  # Sensor importieren
 
 spi = SoftSPI(                  #Einstellung für Display
-    baudrate = 20000000, 
-    polarity = 1,
+    baudrate = 20000000,        # Übertragungsrate
+    polarity = 1,               
     phase = 0, 
-    sck = Pin(18), 
+    sck = Pin(18),              
     mosi = Pin(19), 
     miso = Pin(13)
     )
 
 tft = st7789.ST7789(                # aus Klasse ST7789 Objekt bilden   dc=None, cs=None, backlight=None, rotation=0)
-    spi,                            # SPI
+    spi,                            # Bus der verwendet wird
     135,                            # breite
     240,                            # höhe
     reset = Pin(23,Pin.OUT),        # Display resten
@@ -38,7 +38,7 @@ while True:
     tft.text(font, "Temperatur = ",10,30,st7789.BLACK,st7789.YELLOW)    # ausgabe text Temperatur =
     tft.text(font, ausgabe, 10, 50, st7789.BLUE, st7789.WHITE)     # ausgabe temperaturwert
     tft.text(font, "Grad Celcius!", 10, 70, st7789.RED,st7789.GREEN)    # ausfageb text Grad celcius
-    tft.text(font, ":)  <3  :D", 10, 100, st7789.YELLOW,st7789.BLACK)   # ausgabe Smileys :)
+    tft.text(font, ":)  :D", 10, 100, st7789.YELLOW,st7789.BLACK)   # ausgabe Smileys :)
 
 
 
