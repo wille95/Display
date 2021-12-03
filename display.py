@@ -2,12 +2,14 @@ from time import sleep                                              # für alle 
 from machine import Pin, SoftSPI, SoftI2C                           # Pin (BMP180, TFT Dispay), SoftSPI (Bus TFT), SoftI2C (Bus BMP180)
 import st7789py as st7789                                           # TFT Display
 from bmp180 import BMP180                                           # BMP180 Sensor
-from bh1750 import BH1750                                       
+from bh1750 import BH1750      
+from HTU2X import HTU21D                                  
 from romfonts import vga2_16x16 as font                             # Schriftart laden
 
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))                             # I2C(BMP180) # Schnittstelle für Sensor
 bmp180 = BMP180(i2c)                                                # Objekt bmp180 aus der Klasse BMP180 initialisieren 
 bh = BH1750(i2c)
+htu = HTU21D(22,21)
                
 spi = SoftSPI(                                                      # Objekt SPI (TFT) initalisieren
     baudrate = 20000000,                                            # Übertragungsrate, Kommunikatiosngeschwindigkeit
@@ -41,22 +43,32 @@ col = 0                                                             # Spalte
 
 while True:
     bmpTemp = round(bmp180.temperature,2)                           # Temperatur runden
-    ausgabe_temp = str(bmpTemp)                                     # Temperatur als String "ausgabe_temp" zuweisen
+    ausgabe_bmp_temp = str(bmpTemp)                                     # Temperatur als String "ausgabe_temp" zuweisen
 
     bmpPress = round(bmp180.pressure)                               # Druck runden
     ausgabe_press=str(bmpPress)                                     # Druck als string "ausgabe_press" zuweisen
     
     bh_Licht = round(bh.luminance(0x10))
-    ausgabe_bh1750 = str(bh_Licht)                               
+    ausgabe_bh1750 = str(bh_Licht)   
 
-    tft.text(font, "Temperatur = ",10,10,st7789.BLACK,st7789.YELLOW)
-    tft.text(font, ausgabe_temp + " \xF8C", 10,30, st7789.BLUE, st7789.WHITE)      
-    tft.text(font, "Druck = ",10,50,st7789.BLACK,st7789.YELLOW)
-    tft.text(font, ausgabe_press + " hPa", 10,70, st7789.BLUE, st7789.WHITE)  
-    tft.text(font, "Lichtsensor = ",10,90,st7789.BLACK,st7789.YELLOW) 
-    tft.text(font, ausgabe_bh1750 + " LUX", 10, 110,st7789.BLUE, st7789.WHITE)
+    htu_luft = (round(htu.humidity,2))
+    ausgabe_htu_luft = str(htu_luft)
 
-    #Interpreter der es interpretiert auf dem controller
+    htu_temp = round(htu.temperature,2)
+    ausgabe_htu_temp = str(htu_temp)
+
+
+    #tft.text(font, "Temperatur = ",10,10,st7789.BLACK,st7789.YELLOW)
+    tft.text(font, ausgabe_bmp_temp + " \xF8C", 10,10, st7789.RED, st7789.BLACK)      
+   #tft.text(font, "Druck = ",10,50,st7789.BLACK,st7789.YELLOW)
+    tft.text(font, ausgabe_press + " hPa", 10,30, st7789.RED, st7789.BLACK)  
+    #tft.text(font, "Lichtsensor = ",10,90,st7789.BLACK,st7789.YELLOW) 
+    tft.text(font, ausgabe_bh1750 + " LUX", 10,50,st7789.BLUE, st7789.BLACK)
+
+    tft.text(font, ausgabe_htu_luft + " %", 10,70,st7789.YELLOW, st7789.BLACK)
+    tft.text(font, ausgabe_htu_temp + " \xF8C", 10,90,st7789.YELLOW, st7789.BLACK)
+
+   #Interpreter der es interpretiert auf dem controller
     # tft = Objekt
     # .txt = methode 
 
